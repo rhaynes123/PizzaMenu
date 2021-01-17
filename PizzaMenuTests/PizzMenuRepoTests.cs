@@ -14,14 +14,17 @@ namespace PizzaMenuTests
         public PizzaMenuRepoTests()
         {
             mockMenuRepo = new Mock<IMenuItemRepository>();
-            var testMenuList = new List<MenuItem>()
+
+            var testItem = new MenuItem
             {
-                new MenuItem
-                {
-                    Id = 1,
-                    Name = "TestItem",
-                    Active = true
-                }
+                Id = 1,
+                Name = "TestItem",
+                Active = true
+            };
+
+            var testMenuList = new List<MenuItem>
+            {
+                testItem
             };
 
             mockMenuRepo.Setup(m =>m.GetItems()).Returns(testMenuList);
@@ -48,5 +51,6 @@ namespace PizzaMenuTests
             Assert.NotEmpty(result);
             Assert.Equal("TestItem", result[0].Name);
         }
+        
     }
 }

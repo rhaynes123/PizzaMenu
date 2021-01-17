@@ -1,13 +1,44 @@
 ﻿@model IEnumerable<PizzaMenu.Models.MenuItem>
+
 @{
     ViewData["Title"] = "Home Page";
 }
+
+<script>
+    function postItemId(itemid) {
+        $(document).ready(function () {
+            $('#response').html('<div class="spinner-border text-info" role="status">'
+                + '<span class= "sr-only"> Loading...</span></div>')
+
+            $.ajax({
+             type:"POST",
+             url: '@Url.Action("GetWaitTimes", "Home")',
+             dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(itemid),
+             beforeSend: function (xhr) {
+                 xhr.setRequestHeader("XSRF-TOKEN",
+                     $('input:hidden[name="__RequestVerificationToken"]').val());
+             },
+
+            }).done(function (data) {
+                $('#response').html('<div class="alert alert-info" role="alert">'
+                    
+                    + ' This item currently has a wait time of '
+                    + data
+                    + ' minutes </div>');
+            })
+             .fail(function () { alert("Error"); })
+        });
+
+    }
+</script>
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Welcome To The Menu of Any Pizza Shop That Isn't Little Caesars (Laugh its meant to be Funny).</p>
 </div>
-
+@Html.AntiForgeryToken()
 <div class="text-center">
     <div class="col-md-6">
         <table class="table table-bordered">
@@ -25,6 +56,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Active)
                     </th>
+                    <th>
+                        Get Wait Time
+                    </th>
                 </tr>
 
 
@@ -32,23 +66,29 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(menuItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(menuItem => item.Name)
-                    </td>
-                    <td>
-                        $@item.BasePrice
-                    </td>
-                    <td>
-                        @(item.Active ? "Yes" : "No")
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(menuItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(menuItem => item.Name)
+                        </td>
+                        <td>
+                            $@item.BasePrice
+                        </td>
+                        <td>
+                            @(item.Active ? "Yes" : "No")
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-secondary" onclick="postItemId(@item.Id)" value="@item.Id" id="btn-get-wait" >See Wait Times</button>
+                        </td>
+                    </tr>
 
                 }
             </tbody>
         </table>
     </div>
 </div>
+
+<div id='response'></div>
+

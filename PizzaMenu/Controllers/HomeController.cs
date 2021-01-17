@@ -30,6 +30,11 @@ namespace PizzaMenu.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult GetWaitTimes([FromBody]int id)
+        {
+            return new JsonResult(_menuItemRepository.ItemWaitTime(id));
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

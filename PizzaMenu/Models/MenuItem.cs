@@ -13,6 +13,7 @@ namespace PizzaMenu.Models
         public bool Active { get; set; }
         [Column(TypeName ="decimal(12, 4)"), Display(Name = "Price"),]
         public decimal BasePrice { get; set; }
+        public int CookTime { get; set; }
         [Display(Name = "Date Added"), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
         public DateTime DateAdded { get; set; }
         [Display(Name = "Modified"), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
